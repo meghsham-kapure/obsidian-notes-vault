@@ -1,0 +1,118 @@
+package dev.spring.DependencyInjection;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class Vehicle {
+
+    //Injecting Object through Field Injection
+    @Autowired
+    private Bike bike;
+
+    public Bike getBike() {
+        return bike;
+    }
+
+
+    //Injecting Object through Setter Injection
+
+    private Car car;
+
+    public Car getCar() {
+        return car;
+    }
+
+    @Autowired
+    public void setCar(Car car) {
+        this.car = car;
+    }
+
+    //Injecting Object through Constructor Injection
+
+    private Airplane airplane;
+
+    @Autowired
+    Vehicle (Airplane airplane){
+        this.airplane=airplane;
+    }
+
+    public Airplane getAirplane() {
+        return airplane;
+    }
+
+    public void setAirplane(Airplane airplane) {
+        this.airplane = airplane;
+    }
+}
+
+
+
+package dev.spring.DependencyInjection;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class Bike {
+    String bikeModelName ="GenericBike";
+    double bikePrice = 100000.00;
+
+    public String getBikeModelName() {
+        return bikeModelName;
+    }
+
+    public void setBikeModelName(String bikeModelName) {
+        this.bikeModelName = bikeModelName;
+    }
+
+    public double getBikePrice() {
+        return bikePrice;
+    }
+
+    public void setBikePrice(double bikePrice) {
+        this.bikePrice = bikePrice;
+    }
+
+    @Override
+    public String toString() {
+        return "Bike{" +
+                "modelName='" + bikeModelName + '\'' +
+                ", price=" + bikePrice +
+                '}';
+    }
+}
+
+
+package dev.spring.DependencyInjection;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class Airplane {
+    String airplaneModelName ="GenericAiroplane";
+    double airplanePrice = 152000000.00;
+
+    public String getAirplaneModelName() {
+        return airplaneModelName;
+    }
+
+    public void setAirplaneModelName(String airplaneModelName) {
+        this.airplaneModelName = airplaneModelName;
+    }
+
+    public double getAirplanePrice() {
+        return airplanePrice;
+    }
+
+    public void setAirplanePrice(double airplanePrice) {
+        this.airplanePrice = airplanePrice;
+    }
+
+    @Override
+    public String toString() {
+        return "Airplane{" +
+                "airplaneModelName='" + airplaneModelName + '\'' +
+                ", airplanePrice=" + airplanePrice +
+                '}';
+    }
+}

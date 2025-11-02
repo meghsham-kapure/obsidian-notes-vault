@@ -1,0 +1,10 @@
+{
+  "theme": "obsidian",
+  "accentColor": "#9ee7ff",
+  "interfaceFontFamily": "Source Code Pro",
+  "textFontFamily": "",
+  "monospaceFontFamily": "Source Code Pro",
+  "baseFontSize": 16,
+  "baseFontSizeAction": true,
+  "nativeMenus": true
+}

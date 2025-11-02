@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.4.5</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.codex</groupId>
+	<artifactId>JournalApp</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>JournalApp</name>
+	<description>Journal App built using Spring Boot and Mongo DB</description>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+		<java.version>17</java.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+
+
+
+spring.application.name  =JournalApp
+spring.data.mongodb.host =127.0.0.1
+spring.data.mongodb.port =27017
+spring.data.mongodb.database = JournalApp
+
+
+
+package com.codex.JournalApp;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class JournalApp {
+
+	public static void main(String[] args) {
+		SpringApplication.run(JournalApp.class, args);
+	}
+
+}
+
+
+
+
+package com.codex.JournalApp.service;
+
+import com.codex.JournalApp.model.JournalModel;
+import com.codex.JournalApp.repository.JournalRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+public class JournalService {
+
+    @Autowired
+    JournalRepository journalRepository;
+
+    public JournalModel createJournal(JournalModel journalEntry) {
+        return journalRepository.save(journalEntry);
+    }
+
+    public String updateModel(String Id, JournalModel journalEntry) {
+        journalRepository.fi
+    }
+}
+
+
+
+
+package com.codex.JournalApp.repository;
+
+import com.codex.JournalApp.model.JournalModel;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface JournalRepository extends MongoRepository <JournalModel, String> {
+}
+
+
+package com.codex.JournalApp.model;
+
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.stereotype.Component;
+
+import java.util.Objects;
+
+@Document(collation = "Journals" )
+public class JournalModel {
+    @Id
+    private String journalId;
+    private String journalTitle;
+    private String journalText;
+    private String journalDate;
+
+    public JournalModel() {
+
+    }
+
+    public JournalModel(String journalId, String journalTitle, String journalText, String journalDate) {
+        this.journalId = journalId;
+        this.journalTitle = journalTitle;
+        this.journalText = journalText;
+        this.journalDate = journalDate;
+    }
+
+    @Override
+    public String toString() {
+        return "JournalModel{" +
+                "journalId='" + journalId + '\'' +
+                ", journalTitle='" + journalTitle + '\'' +
+                ", journalText='" + journalText + '\'' +
+                ", journalDate='" + journalDate + '\'' +
+                '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(journalId);
+    }
+
+    public String getJournalId() {
+        return journalId;
+    }
+
+    public void setJournalId(String journalId) {
+        this.journalId = journalId;
+    }
+
+    public String getJournalTitle() {
+        return journalTitle;
+    }
+
+    public void setJournalTitle(String journalTitle) {
+        this.journalTitle = journalTitle;
+    }
+
+    public String getJournalText() {
+        return journalText;
+    }
+
+    public void setJournalText(String journalText) {
+        this.journalText = journalText;
+    }
+
+    public String getJournalDate() {
+        return journalDate;
+    }
+
+    public void setJournalDate(String journalDate) {
+        this.journalDate = journalDate;
+    }
+}
+
+
+
+package com.codex.JournalApp.controller;
+
+import com.codex.JournalApp.model.JournalModel;
+import com.codex.JournalApp.service.JournalService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/journalApp")
+public class JournalController {
+
+    @Autowired
+    JournalService journalService;
+
+    @GetMapping("/healthCheck")
+    public String healthCheck(){
+        return "OK";
+    }
+
+    @PostMapping("/createJournal")
+    public JournalModel createJournal (@RequestBody JournalModel journalEntry){
+        return journalService.createJournal(journalEntry);
+    }
+
+    PutMapping("/updateJournal/{Id}")
+    public String updateModel (@PathVariable String Id, @RequestBody JournalModel journalEntry){
+        return JournalService.updateModel(Id, journalEntry);
+    }
+}

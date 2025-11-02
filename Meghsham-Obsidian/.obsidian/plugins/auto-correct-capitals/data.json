@@ -1,0 +1,11 @@
+{
+  "exclusionList": [],
+  "capitalizeListItem": true,
+  "capitalizeSentences": true,
+  "abbreviations": [
+    "e.g.",
+    "i.e.",
+    "etc.",
+    "vs."
+  ]
+}

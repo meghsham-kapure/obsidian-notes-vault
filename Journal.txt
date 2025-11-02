@@ -1,0 +1,239 @@
+package com.codex.journal.JournalContollers;
+
+import com.codex.journal.JournalEntities.JournalEntry;
+import com.codex.journal.JournalServices.JournalService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/journalApp")
+public class JournalController {
+
+    @Autowired
+    JournalService js;
+    //endpoint to check whether Journal Application is working or not
+    @GetMapping("/healthCheck")
+    public String healthCheck() {
+        return "OK";
+    }
+
+    //get all the records in journal records
+    @GetMapping("/getAllJournals")
+    public Map<Integer, JournalEntry> getAllJournals() {
+        return  js.getAllJournals();
+    }
+
+    //get all the records in journal records
+    @GetMapping("/getJournal/{id}")
+    public JournalEntry getJournal(@PathVariable int id) {
+        return  js.getJournal(id);
+    }
+
+    //create new record in journal app
+    @PostMapping("/createJournal")
+    public String createJournal(@RequestBody JournalEntry journalEntry) {
+        return js.createJournal(journalEntry.getId(), journalEntry);
+    }
+
+    //delete record in journal app
+    @DeleteMapping("/deleteJournal/{id}")
+    public JournalEntry deleteJournal(@PathVariable int id) {
+        return  js.deleteJournal(id);
+    }
+
+    //update record in journal app
+        @PutMapping("/updateJournal/{id}")
+    public JournalEntry updateJournal(@PathVariable int id, @RequestBody JournalEntry journalEntry) {
+        return  js.updateJournal(id, journalEntry);
+    }
+}
+
+
+package com.codex.journal.JournalEntities;
+
+public class JournalEntry{
+    private int id;
+    private String title;
+    private String content;
+    private String date;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public JournalEntry(int id, String title, String content, String date) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.date = date;
+    }
+
+    public JournalEntry(){};
+
+    @Override
+    public String toString() {
+        return "JournalEntry{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", date='" + date + '\'' +
+                '}';
+    }
+
+
+}
+
+
+package com.codex.journal.JournalServices;
+
+import com.codex.journal.JournalEntities.JournalEntry;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
+
+
+@Service
+public class JournalService {
+    private Map<Integer,JournalEntry> journalEntries = new HashMap<>();
+
+    JournalService(){
+        journalEntries.put(1, new JournalEntry(1,"SB Fundamentals","Learned SB Fundamentals","2025-05-01"));
+        journalEntries.put(2, new JournalEntry(2,"SB Dependency Injection","Learned SB Dependency Injection","2025-05-02"));
+        journalEntries.put(3, new JournalEntry(3,"SB WEB","Learned SB WEB","2025-05-03"));
+        journalEntries.put(4, new JournalEntry(4,"SB Data JPA","Learned SB Data JPA","2025-05-04"));
+        journalEntries.put(5, new JournalEntry(5,"SB Response Entity","Learned SB Response Entity","2025-05-05"));
+    }
+
+    public Map <Integer,JournalEntry> getAllJournals() {
+        return journalEntries;
+    }
+
+    public String createJournal(int id, JournalEntry journalEntry) {
+        journalEntries.put(journalEntry.getId(), new JournalEntry(
+                journalEntry.getId(),
+                journalEntry.getTitle(),journalEntry.getContent(),journalEntry.getDate())
+        );
+
+        return journalEntry.toString();
+    }
+
+    public JournalEntry getJournal(int id) {
+        return journalEntries.get(id);
+    }
+
+    public JournalEntry deleteJournal(int id) {
+        return journalEntries.remove(id);
+    }
+
+    public JournalEntry updateJournal(int id, JournalEntry journalEntryNew) {
+        if(journalEntries.get(journalEntryNew.getId())!= null) {
+          return journalEntries.put(journalEntryNew.getId(), journalEntryNew);
+        }else{
+            return null;
+        }
+    }
+}
+
+
+package com.codex.journal;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class JournalApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(JournalApplication.class, args);
+    }
+
+}
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.5</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.codeX</groupId>
+    <artifactId>Journal_V1</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>Journal</name>
+    <description>Journal</description>
+    <url/>
+    <licenses>
+        <license/>
+    </licenses>
+    <developers>
+        <developer/>
+    </developers>
+    <scm>
+        <connection/>
+        <developerConnection/>
+        <tag/>
+        <url/>
+    </scm>
+    <properties>
+        <java.version>17</java.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

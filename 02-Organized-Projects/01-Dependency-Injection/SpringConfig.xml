@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Spring XML Configuration for Autowiring Demo
+    
+    This configuration file demonstrates two Spring autowiring strategies:
+    1. ByType Autowiring - Spring automatically wires beans based on their type
+    2. ByName Autowiring - Spring automatically wires beans based on their name
+    
+    USAGE:
+    - Load this file using ClassPathXmlApplicationContext("SpringConfig.xml")
+    - Spring will automatically inject dependencies based on the autowire attribute
+    
+    AUTOWIRING STRATEGIES:
+    - byType: Spring finds a bean of the same type as the property
+    - byName: Spring finds a bean with the same name as the property
+    - constructor: Similar to byType but for constructor arguments
+    - autodetect: Spring chooses between constructor and byType
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 
+        BYTYPE AUTOWIRING EXAMPLE
+        Spring will automatically inject the Engine bean into the Car bean
+        because the Car class has an Engine property and Spring finds a bean of type Engine
+    -->
+    <bean id="car" class="org.example.ByType.Car" autowire="byType"/>
+    
+    <!-- Engine bean - will be automatically injected into Car -->
+    <bean id="engine" class="org.example.ByType.Engine"/>
+
+    <!-- 
+        BYNAME AUTOWIRING EXAMPLE
+        Spring will automatically inject the OperatingSystem bean into the Laptop bean
+        because the Laptop class has an operatingSystem property and Spring finds a bean 
+        with the same name (operatingSystem)
+    -->
+    <bean id="laptop" class="org.example.ByName.Laptop" autowire="byName"/>
+    
+    <!-- OperatingSystem bean - will be automatically injected into Laptop -->
+    <bean id="operatingSystem" class="org.example.ByName.OperatingSystem">
+        <property name="operatingSystemName" value="Windows 11"/>
+    </bean>
+
+</beans>

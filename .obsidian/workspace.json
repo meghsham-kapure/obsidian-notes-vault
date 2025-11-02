@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "4cd0bec2c381e94e",
+        "id": "ea47c6bae891fdc2",
         "type": "tabs",
         "children": [
           {
-            "id": "a99260db82ce41a0",
+            "id": "945c8e8db64365c0",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "hi.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "hi"
+              "title": "New tab"
             }
           }
         ]
@@ -78,7 +74,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 630.5
   },
   "right": {
     "id": "d501408928552b79",
@@ -169,8 +165,13 @@
       "bases:Create new base": false
     }
   },
-  "active": "a99260db82ce41a0",
+  "active": "945c8e8db64365c0",
   "lastOpenFiles": [
+    "Meghsham-Obsidian/OldData/Multi-Node Setup Apache Pinot/ChatGPT.md",
+    "Meghsham-Obsidian/OldData/NGINX Handbook/NGINX Handbook.md",
+    "Meghsham-Obsidian/OldData/Apache Pinot 101/1..md",
+    "Meghsham-Obsidian/Database/Relationships/Relationships.md",
+    "hi.md",
     "RestTemplate.md",
     "JPA.md",
     "Hospital Management Project A-Z.md",
@@ -190,7 +191,6 @@
     "Spring",
     "React Notes/Hooks01_useState.md",
     "React Notes/#React Hooks Introduction.md",
-    "React Notes",
-    "hi.md"
+    "React Notes"
   ]
 }

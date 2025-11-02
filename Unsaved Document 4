@@ -1,0 +1,153 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.example</groupId>
+  <artifactId>DependencyInjection_1XmlConfig</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>DependencyInjection_1XmlConfig</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>6.2.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>6.2.0</version>
+    </dependency>
+
+  </dependencies>
+</project>
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean class="org.example.Player" id="player1">
+        <property name="name" value="Sachin"></property>
+        <property name="ranking" value="1"></property>
+    </bean>
+
+<!--    Constructor Injection-->
+    <bean class="org.example.Developer" id="dev1">
+        <constructor-arg value="Java Spring Developer"/>
+        <constructor-arg value="976"/>
+    </bean>
+
+    <bean class="org.example.Developer" id="dev2">
+        <constructor-arg value="873" index="1" />
+        <constructor-arg value="MERN Stack Developer" index="0"/>
+    </bean>
+
+    <bean class="org.example.Developer" id="dev3">
+<!--        order of element is same as defined in constructor-->
+        <constructor-arg  name="leetCodeScore" value="MEAN Stack Developer" />
+        <constructor-arg  name="techStack" value="749" />
+    </bean>
+
+<!--    Injection for object reference -->
+    <bean class="org.example.Person" id ="personObject">
+        <constructor-arg name="dev"   ref="dev1"/>
+        <constructor-arg name="player" ref="player1"/>
+    </bean>
+</beans>
+
+
+package org.example;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+/**
+ * Hello world!
+ *
+ */
+public class App
+{
+    public static void main( String[] args )
+    {
+        ApplicationContext context = new ClassPathXmlApplicationContext("SpringConfig.xml");
+        Player p1 =(Player) context. getBean("player1");
+        System.out.println(p1.getName());
+        System.out.println(p1.getRanking());
+
+        p1.setName("AB Deviliers");
+        p1.setRanking(2);
+
+        System.out.println(p1.getName());
+        System.out.println(p1.getRanking());
+
+        //Constructor injection
+
+        Developer dev1= (Developer) context.getBean("dev1");
+        System.out.println(dev1.toString());
+        Developer dev2= (Developer) context.getBean("dev2");
+        System.out.println(dev2.toString());
+        Developer dev3= (Developer) context.getBean("dev3");
+        System.out.println(dev3.toString());
+        System.out.println("******");
+        Person person = (Person) context.getBean("personObject");
+        person.showPerson();
+
+    }
+}
+
+
+package org.example;
+
+public class Developer {
+
+    private String techStack;
+    private int leetCodeScore;
+
+    @Override
+    public String toString() {
+        return "Developer{" +
+                "techStack='" + techStack + '\'' +
+                ", leetCodeScore=" + leetCodeScore +
+                '}';
+    }
+
+    public Developer(String techStack, int leetCodeScore) {
+        this.techStack = techStack;
+        this.leetCodeScore = leetCodeScore;
+    }
+}
+
+package org.example;
+
+public class Person {
+    private Developer dev;
+    private Player player;
+
+    public Person(Developer dev, Player player) {
+        this.dev = dev;
+        this.player = player;
+    }
+
+    void showPerson(){
+        System.out.println(dev.toString());
+        System.out.println(player.toString());
+    }
+}

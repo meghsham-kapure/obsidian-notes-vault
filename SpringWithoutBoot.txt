@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.4.1</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.codeX</groupId>
+	<artifactId>SpringWebDev_P1</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>SpringWebDev_P1</name>
+	<description>Demo project for Spring Boot</description>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+		<java.version>17</java.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.36</version>
+			<scope>provided</scope>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>1.18.36</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>1.18.36</version>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+spring.application.name=SpringWebDev_P1
+package com.codeX.SpringWebDev_P1;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class SpringWebDevP1Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SpringWebDevP1Application.class, args);
+	}
+
+}
+package com.codeX.SpringWebDev_P1.Service;
+
+import com.codeX.SpringWebDev_P1.Model.Product;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+@Service
+public class ProductService {
+
+    private List<Product> productList = new ArrayList< Product>(Arrays.asList(
+            new Product(1,"Redmi Note 7", "Mobiles", 15000),
+            new Product(2,"Redmi Pad 7", "Tablets",30000),
+            new Product(3,"Lenovo Legion Y540","Laptops", 70000),
+            new Product(4,"Realme Buds Wireless 3","Neckband",1500),
+            new Product(5,"Dell Keyboard and Mouse Combo", "Keyboard and Mouse Combo",1700)
+    )
+    );
+
+    public List<Product> getProducts (){
+        return productList;
+    }
+
+    public Product getProductsById (int searchProductId){
+        for (Product product : productList){
+            if (product.getProductId()==searchProductId)
+                return product;
+        }
+        return new Product(-1,null,null,0);
+    }
+
+    public void createProduct (Product product){
+        productList.add(product);
+    }
+
+
+    public void updateProduct(int updateProductId, Product updateProduct) {
+        for (int i = 0; i < productList.size(); i++) {
+            if (productList.get(i).getProductId() == updateProductId) {
+                productList.set(i, updateProduct);
+                return;
+            }
+        }
+    }
+
+    public void deleteProduct(int deleteProductId) {
+        Product deleteProduct=null;
+        for (Product product : productList){
+           if (product.getProductId()==deleteProductId){
+               deleteProduct = product;
+               break;
+           }
+        }
+        productList.remove(deleteProduct);
+    }
+}
+package com.codeX.SpringWebDev_P1.Model;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+public class Product {
+    private int productId;
+    private String title;
+    private String category;
+    private double price;
+}
+package com.codeX.SpringWebDev_P1.Controller;
+
+import com.codeX.SpringWebDev_P1.Model.Product;
+import com.codeX.SpringWebDev_P1.Service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+public class ProductController {
+
+    @Autowired
+    private ProductService productService;
+
+    @GetMapping("/products")
+    public List<Product> getProducts (){
+        return productService.getProducts();
+    }
+
+    @GetMapping("/products/{searchProductId}")
+    public Product getProductsById (@PathVariable int searchProductId){
+        return productService.getProductsById(searchProductId);
+    }
+
+    @PostMapping("/products")
+    public void createProducts (@RequestBody Product product){
+        productService.createProduct(product);
+    }
+
+    @PutMapping("/products/{updateProductId}")
+    public void updateProduct (@PathVariable int updateProductId,@RequestBody Product product){
+        productService.updateProduct(updateProductId, product);
+    }
+
+    @DeleteMapping("/products/{productId}")
+    public void deleteProduct (@PathVariable int productId){
+        productService.deleteProduct(productId);
+    }
+
+
+}

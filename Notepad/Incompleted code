@@ -1,0 +1,145 @@
+class Solution {
+    public static boolean buddyStrings(String charSwapper, String goal) {
+        if (charSwapper.length() != goal.length()) return false;
+
+        char[] arr = charSwapper.toCharArray();
+
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = i + 1; j < arr.length; j++) {
+                // Swap characters at index i and j
+                char temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+
+                // Check if it matches goal
+                if (new String(arr).equals(goal)) {
+                    return true;
+                }
+
+                // Swap back to restore original array for next iteration
+                temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+        return false;
+    }
+}
+=================================================================================
+
+
+package Strings;
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CommonCharLC1002 {
+    public static void main(String[] args) {
+        System.out.println(commonChars(new String[]{"bella","label","roller"}));
+
+    }
+
+    public static List<String> commonChars(String[] words) {
+
+        for(int i=0; i<words[0].length(); i++){
+
+            char searchValue = words[0].charAt(i);
+
+            boolean flag = true;
+
+            for (int j = 1; j < words.length; j++) {
+
+                if (words[i])
+            }
+
+
+        }
+
+    }
+
+    public static List<Integer> duplicatedIndex (String word , char searchValue ){
+        List <Integer> occurredAt = new ArrayList<>();
+
+        for (int i = 0; i < word.length(); i++) {
+            if (searchValue == word.charAt(i)){
+                occurredAt.add(i);
+            }
+        }
+        return occurredAt;
+    }
+
+
+
+
+
+
+
+
+
+    public static ArrayList <String> duplicates (StringBuilder str1, StringBuilder str2, StringBuilder str3 ){
+
+        System.out.println(duplicates (new StringBuilder("meghsham"),new StringBuilder("radhesham"), new StringBuilder("ghanshyam")));
+
+
+        ArrayList <String> duplicateCharacter = new ArrayList<>();
+        for (int i = 0; i < str1.length(); i++) {
+            for (int j = 0; j < str2.length(); j++) {
+                if(str1.charAt(i)==str2.charAt(j)){
+                    for (int k = 0; k <str3.length() ; k++) {
+                        if(str1.charAt(i)==str3.charAt(k)) {
+                            duplicateCharacter.add(""+ str1.charAt(i));
+                            str1.deleteCharAt(i);
+                            str2.deleteCharAt(j);
+                            str3.deleteCharAt(k);
+                        }
+                    }
+                }
+            }
+        }
+        return duplicateCharacter;
+
+
+    }
+
+}
+
+
+
+
+========================================================================================================================================================
+
+
+package LeetCode;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.swing.tree.TreeNode;
+
+public class Arrays_OnePlus {
+    public static void main(String[] args) {
+        System.out.println((sortedArrayToBST(new int [] {-10,-3,0,5,9})));;
+    }
+
+    public static TreeNode sortedArrayToBST(int[] nums) {
+
+    }
+
+
+
+}
+
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode() {}
+    TreeNode(int val) { this.val = val; }
+    TreeNode(int val, TreeNode left, TreeNode right) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+}

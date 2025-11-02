@@ -1,0 +1,265 @@
+package com.codex.SB02_JournalKeeper;
+
+import com.codex.SB02_JournalKeeper.model.Journal;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class Sb0201RestfulServicesApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Sb0201RestfulServicesApplication.class, args);
+
+        Journal j1 = new Journal();
+        j1.setJournalId(1);
+        j1.setJournalTitle("Learn Spring Boot");
+        j1.setJournalDate("11 April 2025");
+        j1.setJournalDescription("Hey I am learning spring boot application");
+        j1.setJournalType("Spring Boot");
+        j1.setJournalLocation("Karvenagar, Pune");
+        j1.setJournalStatus("Success");
+
+
+
+        Journal j2 = new Journal();
+        j2.setJournalId(2);
+        j2.setJournalTitle("Learn Spring Boot");
+        j2.setJournalDate("12 April 2025");
+        j2.setJournalDescription("Hey I am building spring boot application");
+        j2.setJournalType("Spring Boot");
+        j2.setJournalLocation("Kalyani Nagar, Pune");
+        j2.setJournalStatus("Success");
+
+
+
+        Journal j3 = new Journal();
+        j3.setJournalId(3);
+        j3.setJournalTitle("Learn React");
+        j3.setJournalDate("13 April 2025");
+        j3.setJournalDescription("Hey I am learning react spa application");
+        j3.setJournalType("React jS");
+        j3.setJournalLocation("Karvenagar, Pune");
+        j3.setJournalStatus("Failed");
+
+
+
+        Journal j4 = new Journal();
+        j4.setJournalId(4);
+        j4.setJournalTitle("Build React");
+        j4.setJournalDate("14 April 2025");
+        j4.setJournalDescription("Hey I am building react spa application");
+        j4.setJournalType("React jS");
+        j4.setJournalLocation("Kalyani Nagar, Pune");
+        j4.setJournalStatus("Success");
+
+        System.out.println(j1);
+        System.out.println(j2);
+        System.out.println(j3);
+        System.out.println(j4);
+
+        System.out.println(j);
+
+
+    }
+
+}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.4</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.codeX</groupId>
+    <artifactId>SB02_01_RestfulServices</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>SB02_01_RestfulServices</name>
+    <description>SB02_01_RestfulServices</description>
+    <url/>
+    <licenses>
+        <license/>
+    </licenses>
+    <developers>
+        <developer/>
+    </developers>
+    <scm>
+        <connection/>
+        <developerConnection/>
+        <tag/>
+        <url/>
+    </scm>
+    <properties>
+        <java.version>17</java.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.36</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+
+
+
+package com.codex.SB02_JournalKeeper.model;
+
+import lombok.*;
+import org.springframework.stereotype.Component;
+
+@Component
+@Data
+public class Journal {
+    private int journalId;
+    private String journalTitle;
+    private String journalDescription;
+    private String journalDate;
+    private String journalLocation;
+    private String journalType;
+    private String journalStatus;
+
+}
+
+
+
+
+package com.codex.sb02_journal.controller;
+
+public class journalController {
+}
+
+
+package com.codex.sb02_journal.model;
+
+import java.util.Date;
+
+public class journalModel {
+    private String title;
+    private Date date;
+    private String text;
+    private boolean isPinned;
+
+    public journalModel(String title, Date date, String text, boolean isPinned) {
+        this.title = title;
+        this.date = date;
+        this.text = text;
+        this.isPinned = isPinned;
+    }
+
+    @Override
+    public String toString() {
+        return "journalModel{" +
+                "title='" + title + '\'' +
+                ", date=" + date +
+                ", text='" + text + '\'' +
+                ", isPinned=" + isPinned +
+                '}';
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public boolean isPinned() {
+        return isPinned;
+    }
+
+    public void setPinned(boolean pinned) {
+        isPinned = pinned;
+    }
+}
+
+
+package com.codex.sb02_journal.service;
+
+import com.codex.sb02_journal.model.journalModel;
+
+import java.util.ArrayList;
+import java.util.Date;
+
+public class journalService {
+
+    private ArrayList<journalModel> journals = new ArrayList<journalModel>();
+
+    protected void addJournal (String title, Date date, String text, boolean isPinned){
+        journals.add(new journalModel(title, date, text, isPinned));
+    }
+
+    protected void showJournals(){
+        for (journalModel journal : journals) {
+            System.out.println(journal);
+        }
+    }
+
+}
+
+
+
+package com.codex.sb02_journal;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class Sb02JournalApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Sb02JournalApplication.class, args);
+    }
+
+}

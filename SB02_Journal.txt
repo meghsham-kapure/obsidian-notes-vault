@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.5</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.codeX</groupId>
+    <artifactId>Journal_V2</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>Journal_V2</name>
+    <description>Journal_V2</description>
+    <url/>
+    <licenses>
+        <license/>
+    </licenses>
+    <developers>
+        <developer/>
+    </developers>
+    <scm>
+        <connection/>
+        <developerConnection/>
+        <tag/>
+        <url/>
+    </scm>
+    <properties>
+        <java.version>21</java.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.38</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+
+
+package com.codex.journal_v2.controllers;
+
+import com.codex.journal_v2.entities.JournalEntry;
+import com.codex.journal_v2.services.JournalServices;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/journalApp")
+public class JournalController {
+
+    @Autowired
+    private JournalServices journalServices;
+
+    @GetMapping("/healthCheck")
+    public ResponseEntity<String> healthCheck() {
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
+
+    @PostMapping("/createJournal")
+    public ResponseEntity<JournalEntry> createJournal(@RequestBody JournalEntry journal) {
+      JournalEntry journalEntry =  journalServices.createJournal(journal);
+      if (journalEntry != null) {
+           return new ResponseEntity<>(journalEntry, HttpStatus.CREATED);
+      }
+      else {
+          return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      }
+    }
+
+
+    @GetMapping("/getAllJournals")
+    public List<JournalEntry> getAllJournals() {
+       return  journalServices.getAllJournals();
+    }
+
+    @GetMapping("/getJournal/{journalId}")
+    public ResponseEntity<JournalEntry> getJournal(@PathVariable String journalId) {
+         Optional<JournalEntry> journalEntry = journalServices.getJournal(journalId);
+
+         if(journalEntry.isPresent()){
+             return ResponseEntity.ok(journalEntry.get());
+         }else {
+             return ResponseEntity.notFound().build();
+         }
+
+    }
+
+    @PutMapping("/updateJournal/{journalId}")
+    public JournalEntry updateJournal (@PathVariable String journalId, JournalEntry journalEntry){
+        return journalServices.updateJournal(journalId,journalEntry);
+    }
+
+
+    @DeleteMapping("/deleteJournal/{journalId}")
+    public JournalEntry deleteJournal(@PathVariable String journalId) {
+        return journalServices.deleteJournal(journalId);
+    }
+}
+
+
+package com.codex.journal_v2.entities;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+
+import java.util.Date;
+
+@Document(collection = "journal_entries")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class JournalEntry {
+    @Id
+    private String id;
+    private String title;
+    private String content;
+    private Date date;
+}
+
+
+
+package com.codex.journal_v2.repository;
+
+import com.codex.journal_v2.entities.JournalEntry;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface JournalRepository extends MongoRepository <JournalEntry, String>{
+
+}
+
+
+package com.codex.journal_v2;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class JournalV2Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(JournalV2Application.class, args);
+    }
+
+}
+
+
+
+
+spring.application.name=Journal_V2
+
+# Mongo Properties
+
+# Mongo Db Connection properties
+spring.data.mongodb.host=localhost
+spring.data.mongodb.port= 27017
+
+# MongoDB database name  to work with
+spring.data.mongodb.database=Journal_DB
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.5</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.codeX</groupId>
+    <artifactId>Journal_V2</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>Journal_V2</name>
+    <description>Journal_V2</description>
+    <url/>
+    <licenses>
+        <license/>
+    </licenses>
+    <developers>
+        <developer/>
+    </developers>
+    <scm>
+        <connection/>
+        <developerConnection/>
+        <tag/>
+        <url/>
+    </scm>
+    <properties>
+        <java.version>21</java.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.38</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+
+
+package com.codex.journal_v2.controllers;
+
+import com.codex.journal_v2.entities.JournalEntry;
+import com.codex.journal_v2.services.JournalServices;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/journalApp")
+public class JournalController {
+
+    @Autowired
+    private JournalServices journalServices;
+
+    @GetMapping("/healthCheck")
+    public ResponseEntity<String> healthCheck() {
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
+
+    @PostMapping("/createJournal")
+    public ResponseEntity<JournalEntry> createJournal(@RequestBody JournalEntry journal) {
+      JournalEntry journalEntry =  journalServices.createJournal(journal);
+      if (journalEntry != null) {
+           return new ResponseEntity<>(journalEntry, HttpStatus.CREATED);
+      }
+      else {
+          return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      }
+    }
+
+
+    @GetMapping("/getAllJournals")
+    public List<JournalEntry> getAllJournals() {
+       return  journalServices.getAllJournals();
+    }
+
+    @GetMapping("/getJournal/{journalId}")
+    public ResponseEntity<JournalEntry> getJournal(@PathVariable String journalId) {
+         Optional<JournalEntry> journalEntry = journalServices.getJournal(journalId);
+
+         if(journalEntry.isPresent()){
+             return ResponseEntity.ok(journalEntry.get());
+         }else {
+             return ResponseEntity.notFound().build();
+         }
+
+    }
+
+    @PutMapping("/updateJournal/{journalId}")
+    public JournalEntry updateJournal (@PathVariable String journalId, JournalEntry journalEntry){
+        return journalServices.updateJournal(journalId,journalEntry);
+    }
+
+
+    @DeleteMapping("/deleteJournal/{journalId}")
+    public JournalEntry deleteJournal(@PathVariable String journalId) {
+        return journalServices.deleteJournal(journalId);
+    }
+}
+
+
+package com.codex.journal_v2.entities;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+
+import java.util.Date;
+
+@Document(collection = "journal_entries")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class JournalEntry {
+    @Id
+    private String id;
+    private String title;
+    private String content;
+    private Date date;
+}
+
+
+
+package com.codex.journal_v2.repository;
+
+import com.codex.journal_v2.entities.JournalEntry;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface JournalRepository extends MongoRepository <JournalEntry, String>{
+
+}
+
+
+package com.codex.journal_v2;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class JournalV2Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(JournalV2Application.class, args);
+    }
+
+}
+
+
+
+
+spring.application.name=Journal_V2
+
+# Mongo Properties
+
+# Mongo Db Connection properties
+spring.data.mongodb.host=localhost
+spring.data.mongodb.port= 27017
+
+# MongoDB database name  to work with
+spring.data.mongodb.database=Journal_DB

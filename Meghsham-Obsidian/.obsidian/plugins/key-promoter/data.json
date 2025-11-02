@@ -1,0 +1,21 @@
+{
+  "showUnassigned": true,
+  "showAssigned": true,
+  "threshold": 0,
+  "notificationTimeout": 5,
+  "template": "`{{commandId}}` - {{commandName}} - `{{hotkey}}`\n",
+  "descriptionOfActions": true,
+  "mouseStatistics": {
+    "file-explorer:new-file": 3,
+    "file-explorer:new-file-in-current-tab": 3,
+    "file-explorer:new-folder": 3,
+    "workspace:close-window": 3,
+    "workspace:undo-close-pane": 2,
+    "workspace:close": 2,
+    "workspace:close-others": 2,
+    "workspace:close-tab-group": 2,
+    "workspace:close-others-tab-group": 2,
+    "obsidian-git:backup-and-close": 2
+  },
+  "keyboardStatistics": {}
+}

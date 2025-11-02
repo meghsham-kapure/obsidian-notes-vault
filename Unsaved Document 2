@@ -1,0 +1,58 @@
+package com.codex.dependencyinjection.Person;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class Developer {
+
+    @Autowired
+    private Employee emp;
+    private String techStack;
+
+    public Employee getEmp() {
+        return emp;
+    }
+
+    public void setEmp(Employee emp) {
+        this.emp = emp;
+    }
+
+    public String getTechStack() {
+        return techStack;
+    }
+
+    public void setTechStack(String techStack) {
+        this.techStack = techStack;
+    }
+}
+
+
+package com.codex.dependencyinjection.Person;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class Employee {
+    private int id;
+    private String name;
+
+    public Employee(){
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}

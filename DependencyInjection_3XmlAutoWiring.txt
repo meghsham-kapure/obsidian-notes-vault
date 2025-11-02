@@ -1,0 +1,96 @@
+package org.example;
+
+import org.example.ByName.Laptop;
+import org.example.ByName.OperatingSystem;
+import org.example.ByType.Car;
+import org.example.ByType.Engine;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class App
+{
+    public static void main( String[] args ) {
+
+        ApplicationContext context = new ClassPathXmlApplicationContext("SpringConfig.xml");
+
+        Car car = context.getBean(Car.class);
+        Engine carEngine=car.getEngine();
+        carEngine.start();
+
+
+        Laptop  laptop= context.getBean(Laptop.class);
+        OperatingSystem laptopOperatingSystem = laptop.getOperatingSystem();
+        laptopOperatingSystem.boot();
+
+    }
+}
+
+
+
+package org.example.ByType;
+
+public class Engine {
+    private String engineName="V8";
+
+    public void start (){
+        System.out.println(engineName+" Engine Started");
+    }
+}
+
+
+
+
+package org.example.ByType;
+
+public class Car {
+    Engine engine;
+
+    public Engine getEngine() {
+        return engine;
+    }
+
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
+}
+
+
+
+package org.example.ByName;
+
+public class Laptop {
+    private OperatingSystem operatingSystem;
+
+    public OperatingSystem getOperatingSystem() {
+        return operatingSystem;
+    }
+
+    public void setOperatingSystem(OperatingSystem operatingSystem) {
+        this.operatingSystem = operatingSystem;
+    }
+}
+
+
+
+
+
+package org.example.ByName;
+
+public class OperatingSystem {
+    private String operatingSystemName;
+
+    public String getOperatingSystemName() {
+        return operatingSystemName;
+    }
+
+    public void setOperatingSystemName(String operatingSystemName) {
+        this.operatingSystemName = operatingSystemName;
+    }
+
+    public void boot(){
+        System.out.println("Booting up"+operatingSystemName+" operating system");
+    }
+}
+
+
+

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Maven POM Configuration for Spring Boot Constructor Injection Demo
+    
+    PROJECT PURPOSE: Demonstrates Spring Boot constructor-based dependency injection
+    using @Autowired annotation on constructors.
+    
+    WHAT THIS PROJECT DOES:
+    - Shows how to use constructor injection in Spring Boot
+    - Demonstrates @Component and @Autowired annotations
+    - Creates a simple employee-developer relationship example
+    
+    MISSING COMPONENTS:
+    - Application runner to demonstrate the injection
+    - Proper logging configuration
+    - Unit tests
+    - Error handling
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.5</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    
+    <!-- Project Information -->
+    <groupId>com.codex</groupId>
+    <artifactId>spring-constructor-injection-demo</artifactId>
+    <version>1.0.0</version>
+    <name>Spring Constructor Injection Demo</name>
+    <description>Demonstrates Spring Boot constructor-based dependency injection using @Autowired annotation</description>
+    
+    <properties>
+        <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    
+    <dependencies>
+        <!-- Spring Boot Starter - Core Spring Boot functionality -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Test - Testing framework -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- Logging - Better logging than System.out.println -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Spring Boot Maven Plugin - Enables spring-boot:run -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

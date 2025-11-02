@@ -1,0 +1,285 @@
+
+
+package com.codex.mongojournalapp.repository;
+
+import com.codex.mongojournalapp.entity.JournalEntry;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repositorypackage com.codex.mongojournalapp.controller;
+
+import com.codex.mongojournalapp.entity.JournalEntry;
+import com.codex.mongojournalapp.service.JournalService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/journal")
+public class JournalController {
+
+    @Autowired
+    private JournalService journalService;
+
+    @GetMapping("/getHealthCheck")
+    public String healthCheck(){
+        return "OK";
+    }
+
+    @PostMapping("/createJournal")
+    public JournalEntry createJournalEntry(@RequestBody JournalEntry journalEntry){
+        journalService.createJournalEntry(journalEntry);
+        return journalEntry;
+    }
+
+    @GetMapping("/getJournals")
+    public List<JournalEntry> getJournals(){
+        return journalService.getJournals();
+    }
+
+    @GetMapping("/getJournal/{journalId}")
+    public Optional<JournalEntry> getJournal(@PathVariable String journalId){
+        System.out.println(journalService.getJournal(journalId));
+        return  journalService.getJournal(journalId);
+    }
+
+    @PutMapping("/updateJournal")
+    public JournalEntry upgradeJournal( @RequestBody JournalEntry journalEntry){
+       return journalService.upgradeJournal(journalEntry);
+    }
+
+} 
+
+package com.codex.mongojournalapp.entity;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "JournalEntries")
+public class JournalEntry {
+    @Id
+    private String journalID;
+    private String title;
+    private String text;
+    private String date;
+
+    public JournalEntry(String journalID, String title, String text, String date) {
+        this.journalID = journalID;
+        this.title = title;
+        this.text = text;
+        this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "JournalEntry{" +
+                "journalID='" + journalID + '\'' +
+                ", title='" + title + '\'' +
+                ", text='" + text + '\'' +
+                ", date='" + date + '\'' +
+                '}';
+    }
+
+    public String getJournalID() {
+        return journalID;
+    }
+
+    public void setJournalID(String journalID) {
+        this.journalID = journalID;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+}
+
+public interface JournalRepository extends MongoRepository <JournalEntry, String> {
+    Optional<JournalEntry> findByJournalID(String journalID);
+}
+
+
+
+
+package com.codex.mongojournalapp.service;
+
+import com.codex.mongojournalapp.entity.JournalEntry;
+import com.codex.mongojournalapp.repository.JournalRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class JournalService {
+
+    @Autowired
+    private JournalRepository journalRepository;
+
+    public JournalEntry createJournalEntry(JournalEntry journalEntry) {
+        if ( journalEntry.getJournalID() == null || journalEntry.getJournalID().isEmpty()) {
+            throw new IllegalArgumentException("Journal ID cannot be null or empty");
+        }
+        return journalRepository.save(journalEntry);
+    }
+
+    public List<JournalEntry> getJournals() {
+        return journalRepository.findAll();
+    }
+
+
+    public Optional <JournalEntry> getJournal(String journalId) {
+       return journalRepository.findByJournalID(journalId);
+    }
+
+    public JournalEntry upgradeJournal(JournalEntry journalEntryNew) {
+        Optional<JournalEntry> journalEntryOld = getJournal(journalEntryNew.getJournalID());
+
+        if (journalEntryOld.isPresent()) {
+            journalRepository.delete(journalEntryOld.get());
+         return    journalRepository.save(journalEntryNew);
+        }
+        return null;
+    }
+}
+
+
+
+package com.codex.mongojournalapp;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class MongoJournalAppApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(MongoJournalAppApplication.class, args);
+    }
+
+}
+
+
+
+
+spring.application.name=MongoJournalApp
+spring.data.mongodb.host=localhost
+spring.data.mongodb.port=27017
+spring.data.mongodb.database=JournalDB
+
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.5</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.codeX</groupId>
+    <artifactId>MongoJournalApp</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>MongoJournalApp</name>
+    <description>MongoJournalApp</description>
+    <url/>
+    <licenses>
+        <license/>
+    </licenses>
+    <developers>
+        <developer/>
+    </developers>
+    <scm>
+        <connection/>
+        <developerConnection/>
+        <tag/>
+        <url/>
+    </scm>
+    <properties>
+        <java.version>24</java.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

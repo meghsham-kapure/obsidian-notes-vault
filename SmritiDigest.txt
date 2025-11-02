@@ -1,0 +1,238 @@
+package com.legion.SmritiDigest.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.legion.SmritiDigest.service.NoteSevice;
+
+import org.springframework.web.bind.annotation.RequestParam;
+
+
+@RestController
+@RequestMapping("/smriti")
+public class NoteController {
+    
+    @Autowired
+    NoteSevice service;
+
+    // localhost:8080/smriti/healthcheck
+    @GetMapping("/healthcheck")
+    public String healthcheck() {
+        return "Up and Running";
+    }
+
+    @GetMapping("/getNotes")
+    public String getNotes() {
+        return ;
+    }
+    
+}
+
+
+package com.legion.SmritiDigest.entity;
+
+import java.time.LocalDate;
+
+import org.springframework.stereotype.Component;
+
+public class Note {
+    private String title;
+    private String content;
+    private LocalDate date;
+    private String category;
+
+    public Note(String title, String content, String category ){
+        this.title = title;
+        this.content = content;
+        this.category = category;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public String getContent() {
+        return content;
+    }
+    public void setContent(String content) {
+        this.content = content;
+    }
+    public LocalDate getDate() {
+        return date;
+    }
+    public void setDate() {
+        this.date = LocalDate.now();
+    }
+    public String getCategory() {
+        return category;
+    }
+    public void setCategory(String category) {
+        this.category = category;
+    }
+}
+
+
+
+package com.legion.SmritiDigest.repository;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+
+import com.legion.SmritiDigest.entity.Note;
+
+
+@Component
+public class DuumyDatabases {
+    List <Note> notes = new ArrayList<>();
+
+    DuumyDatabases (){
+        notes.add(new Note ("REST Api","Studied REST Api","Dev"));
+        notes.add(new Note ("DSA","Studied Linear Search","DSA"));
+        notes.add(new Note ("Linear Search","Studied Mongo DB Integration","Dev"));
+        notes.add(new Note ("Binary Search","Studied Binary Search","DSA"));
+        notes.add(new Note ("Arraylist","Studied Arraylist","DSA"));
+        notes.add(new Note ("Miltithreading & Concurrency","Studied Miltithreading & Concurrency","Java Core"));
+        notes.add(new Note ("Miltithreading & Concurrency","Studied Miltithreading & Concurrency","Java Core"));
+    }
+}
+
+public class DuumyDatabasesRepo {
+    List <Note> notes = new ArrayList<>();
+
+    DuumyDatabases (){
+        notes.add(new Note ("REST Api","Studied REST Api","Dev"));
+        notes.add(new Note ("DSA","Studied Linear Search","DSA"));
+        notes.add(new Note ("Linear Search","Studied Mongo DB Integration","Dev"));
+        notes.add(new Note ("Binary Search","Studied Binary Search","DSA"));
+        notes.add(new Note ("Arraylist","Studied Arraylist","DSA"));
+        notes.add(new Note ("Miltithreading & Concurrency","Studied Miltithreading & Concurrency","Java Core"));
+        notes.add(new Note ("Miltithreading & Concurrency","Studied Miltithreading & Concurrency","Java Core"));
+    }
+}
+
+
+
+package com.legion.SmritiDigest.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class NoteSevice {
+
+    @Autowired
+    
+
+    
+
+    
+}
+
+
+spring.application.name=SmritiDigest
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>4.0.0-SNAPSHOT</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.legion</groupId>
+	<artifactId>SmritiDigest</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>SmritiDigest</name>
+	<description>Journaling project app in Spring Boot</description>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+		<java.version>21</java.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<version>3.5.3</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+	<repositories>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>https://repo.spring.io/snapshot</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>https://repo.spring.io/snapshot</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
+
+</project>

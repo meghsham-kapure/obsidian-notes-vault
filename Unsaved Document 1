@@ -1,0 +1,27 @@
+package com.codeX;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class Mobile {
+    @Autowired
+    private SIM sim ;
+
+    void checkSIM (){
+         System.out.println(sim!=null?"SIM exists":"SIM not exists");
+    }
+
+}
+
+
+package com.codeX;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class SIM {
+    void showSimCard(){
+        System.out.println("You are using Sim Card");
+    }
+}

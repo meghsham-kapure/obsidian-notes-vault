@@ -1,0 +1,49 @@
+package com.codex.learnh2db.model;
+
+import jakarta.persistence.Id;
+
+public record Shop(@Id ) {
+}
+
+
+package com.codex.learnh2db;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
+
+@SpringBootApplication
+public class LearnH2DbApplication {
+
+    public static void main(String[] args) {
+//        THING 1
+
+//       ConfigurableApplicationContext context =  SpringApplication.run(LearnH2DbApplication.class, args);
+//       Object dSource = context.getBean("dataSource");
+//        System.out.println("Data Source is ==> "+dSource);
+
+//    THING 2
+        SpringApplication.run(LearnH2DbApplication.class, args);
+    }
+
+}
+
+
+
+spring.application.name=LearnH2DB
+# Enable the logging in H2 DB
+#logging.level.com.zaxxer.hikari.HikariConfig=DEBUG
+logging.level.org.springframework.jdbc=DEBUG
+
+spring.h2.console.enabled=true
+spring.datasource.generate-unique-name=false
+spring.datasource.name=LocoShop
+
+
+
+create table shop
+(
+    name      varchar(255) NOT NULL,
+    regNo     int          NOT NULL,
+    propriter varchar(255) NOT NULL
+);

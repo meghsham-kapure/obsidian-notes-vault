@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.4</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.codeX</groupId>
+    <artifactId>SB00_Rest_N_Lambok</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>SB00_Rest_N_Lambok</name>
+    <description>SB00_Rest_N_Lambok</description>
+
+    <properties>
+        <java.version>24</java.version>
+    </properties>
+
+    <dependencies>
+        <!-- Spring Boot Web Starter -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.38</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- MongoDB -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+            <version>3.4.4</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Spring Boot DevTools -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <version>3.4.4</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Compiler Plugin with Lombok Annotation Processing -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.38</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+
+            <!-- Spring Boot Plugin -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+
+
+
+spring.application.name=SB00_Rest_N_Lambok
+# Mongo DB Configuration
+spring.data.mongodb.host=localhost
+spring.data.mongodb.port=27017
+spring.data.mongodb.database=MyUserApplication
+
+
+package com.codex.sb00_rest_n_lambok;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class Sb00RestNLombokApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Sb00RestNLombokApplication.class, args);
+    }
+
+}
+
+
+
+// UserService.java
+package com.codex.sb00_rest_n_lambok.service;
+
+import com.codex.sb00_rest_n_lambok.model.User;
+import com.codex.sb00_rest_n_lambok.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class UserService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    // Fetch all user records
+    public List<User> getUserList() {
+        return userRepository.findAll();
+    }
+
+    // Add a single user record
+    public void addUser(User user) {
+        userRepository.save(user);
+    }
+
+    // Add multiple user records
+    public List<User> addUsers(List<User> users) {
+        for (User user : users) {
+            userRepository.save(user);
+        }
+        return users;
+    }
+
+    // Find a user by ID
+    public Optional<User> findUserById(String userId) {
+        return userRepository.findById(userId);
+    }
+
+    // Find users by name (or part of the name)
+    public List<User> findUsersByName(String searchValue) {
+        return userRepository.findAllByName(searchValue);
+    }
+
+    // Update user record (insert if not exists)
+    public User updateUser(User updatedUser) {
+        return userRepository.save(updatedUser);
+    }
+
+    // Reset password to default for a given user ID
+    public User resetPassword(String userId) {
+        Optional<User> optionalUser = findUserById(userId);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setPassword("defaultPassword1234");
+            return userRepository.save(user);
+        } else {
+            throw new RuntimeException("User not found with id: " + userId);
+        }
+    }
+
+    // Delete a user by ID
+    public void deleteUser(String userId) {
+        userRepository.deleteById(userId);
+    }
+}
+
+
+package com.codex.sb00_rest_n_lambok.repository;
+
+import com.codex.sb00_rest_n_lambok.model.User;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface UserRepository extends MongoRepository<User, String> {
+
+    List<User> findAllByName(String name);
+
+}
+
+
+
+package com.codex.sb00_rest_n_lambok.model;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
+public class User {
+    @Id
+    private String id;
+    private String name;
+    private String email;
+    private String password;
+
+    public User(String id, String name, String email, String password) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    public User() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "ID=" + id +
+                ", NAME='" + name + '\'' +
+                ", EMAIL='" + email + '\'' +
+                ", PASSWORD='" + password + '\'' +
+                '}';
+    }
+}
+
+
+
+// UserController.java
+package com.codex.sb00_rest_n_lambok.controller;
+
+import com.codex.sb00_rest_n_lambok.model.User;
+import com.codex.sb00_rest_n_lambok.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+
+@RestController
+@RequestMapping("/user")
+public class UserController {
+
+    @Autowired
+    private UserService userService;
+
+    // Health check endpoint
+    @GetMapping("/healthCheck")
+    public String userHealthCheck() {
+        return "ok";
+    }
+
+    // Fetch all users from the database
+    @GetMapping("/getAllUsers")
+    public List<User> getAllUsers() {
+        List<User> allUsers = userService.getUserList();
+        System.out.println("[GET] All Users: \n" + allUsers);
+        return allUsers;
+    }
+
+    // Fetch a user by ID
+    @GetMapping("/getUserById/{userId}")
+    public Optional<User> getUserById(@PathVariable String userId) {
+        Optional<User> user = userService.findUserById(userId);
+        System.out.println("[GET] User By ID: \n" + user);
+        return user;
+    }
+
+    // Fetch users whose name contains the search value
+    @GetMapping("/getUsersByName/{searchValue}")
+    public List<User> getUsersByName(@PathVariable String searchValue) {
+        List<User> matchedUsers = userService.findUsersByName(searchValue);
+        System.out.println("[GET] Users by Name: " + searchValue + "\n" + matchedUsers);
+        return matchedUsers;
+    }
+
+    // Add a new user
+    @PostMapping("/addUser")
+    public void addUser(@RequestBody User user) {
+        userService.addUser(user);
+    }
+
+    // Add multiple users
+    @PostMapping("/addMultipleUsers")
+    public List<User> addUsers(@RequestBody List<User> users) {
+        List<User> addedUsers = userService.addUsers(users);
+        System.out.println("[POST] Multiple Users Added: \n" + addedUsers);
+        return addedUsers;
+    }
+
+    // Update a user
+    @PutMapping("/updateUser")
+    public User updateUser(@RequestBody User user) {
+        return userService.updateUser(user);
+    }
+
+    // Reset user password to default
+    @PutMapping("/resetPassword/{userId}")
+    public User resetPassword(@PathVariable String userId) {
+        return userService.resetPassword(userId);
+    }
+
+    // Delete a user by ID
+    @DeleteMapping("/deleteUser/{userId}")
+    public void deleteUser(@PathVariable String userId) {
+        userService.deleteUser(userId);
+    }
+}
+
